@@ -1,8 +1,10 @@
 from django.db import models
 
+
 class Course(models.Model):
-    """ Модель для представления Курса. """
-    name = models.CharField(max_length=100, verbose_name='Название', help_text='Введите название курса')
+    """Модель для представления Курса."""
+
+    name = models.CharField(max_length=100, verbose_name="Название", help_text="Введите название курса")
     image = models.ImageField(
         upload_to="course/image",
         verbose_name="Превью",
@@ -10,7 +12,12 @@ class Course(models.Model):
         blank=True,
         null=True,
     )
-    description = models.TextField(verbose_name='Описание', help_text='Введите описание курса', blank=True, null=True,)
+    description = models.TextField(
+        verbose_name="Описание",
+        help_text="Введите описание курса",
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         verbose_name = "Курс"
@@ -18,9 +25,15 @@ class Course(models.Model):
 
 
 class Lesson(models.Model):
-    """ Модель для представления урока. """
-    name = models.CharField(max_length=100, verbose_name='Название', help_text='Введите название урока')
-    description = models.TextField(verbose_name='Описание', help_text='Введите описание урока', blank=True, null=True, )
+    """Модель для представления урока."""
+
+    name = models.CharField(max_length=100, verbose_name="Название", help_text="Введите название урока")
+    description = models.TextField(
+        verbose_name="Описание",
+        help_text="Введите описание урока",
+        blank=True,
+        null=True,
+    )
     image = models.ImageField(
         upload_to="course/image",
         verbose_name="Превью",

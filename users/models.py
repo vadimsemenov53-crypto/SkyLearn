@@ -1,21 +1,22 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(unique=True, verbose_name='Почта', help_text='Введите адрес эл.почты')
+    email = models.EmailField(unique=True, verbose_name="Почта", help_text="Введите адрес эл.почты")
     phone = PhoneNumberField(
-        verbose_name='Телефон',
-        blank=True, null=True,
-        help_text='Введите номер телефона.',
+        verbose_name="Телефон",
+        blank=True,
+        null=True,
+        help_text="Введите номер телефона.",
     )
-    
+
     city = models.CharField(
         max_length=100,
-        verbose_name='Город',
-        help_text='Введите ваш город',
+        verbose_name="Город",
+        help_text="Введите ваш город",
         blank=True,
         null=True,
     )
@@ -32,5 +33,5 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
