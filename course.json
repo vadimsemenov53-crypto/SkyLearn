@@ -1,0 +1,20 @@
+[
+{
+    "model": "materials.course",
+    "pk": 1,
+    "fields": {
+        "name": "Python develop",
+        "image": "",
+        "description": "Its good course for start"
+    }
+},
+{
+    "model": "materials.course",
+    "pk": 2,
+    "fields": {
+        "name": "Django DRF",
+        "image": "",
+        "description": "Its good course for start"
+    }
+}
+]
