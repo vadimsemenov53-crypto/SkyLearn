@@ -56,6 +56,7 @@ class Payments(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
         help_text='Укажите пользователя совершившего покупку',
+        related_name='payments'
     )
     payment_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата покупки')
     course = models.ForeignKey(
