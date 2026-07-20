@@ -49,6 +49,7 @@ class Lesson(models.Model):
         null=True,
         verbose_name='Курс',
         help_text='Выбери курс урока',
+        related_name='lesson',
     )
 
     class Meta:
