@@ -17,8 +17,10 @@ class CourseViewSet(ModelViewSet):
         """ Метод отвечающий за перераспределение прав доступа """
         if self.action == 'create':
             self.permission_classes = (~IsModer,)
+
         elif self.action in ['update', 'retrieve']:
             self.permission_classes = (IsModer,)
+
         elif self.action == 'destroy':
             self.permission_classes = (~IsModer,)
 
@@ -31,6 +33,7 @@ class LessonCreateAPIView(CreateAPIView):
 
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    permission_classes = (~IsModer,)
 
 
 class LessonListAPIView(ListAPIView):
@@ -45,6 +48,7 @@ class LessonRetrieveAPIView(RetrieveAPIView):
 
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    permission_classes = (IsModer,)
 
 
 class LessonUpdateAPIView(UpdateAPIView):
@@ -52,6 +56,7 @@ class LessonUpdateAPIView(UpdateAPIView):
 
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    permission_classes = (IsModer,)
 
 
 class LessonDestroyAPIView(DestroyAPIView):
@@ -59,3 +64,4 @@ class LessonDestroyAPIView(DestroyAPIView):
 
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    permission_classes = (~IsModer,)
