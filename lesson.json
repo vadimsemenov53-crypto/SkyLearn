@@ -1,0 +1,68 @@
+[
+{
+    "model": "materials.lesson",
+    "pk": 1,
+    "fields": {
+        "name": "Python develop",
+        "description": "Its good course for start",
+        "image": "",
+        "video_url": "https://vkvideo.ru/video-11283947_456241226",
+        "course": 1
+    }
+},
+{
+    "model": "materials.lesson",
+    "pk": 2,
+    "fields": {
+        "name": "Python print",
+        "description": "start base",
+        "image": "",
+        "video_url": "https://vkvideo.ru/video-11283947",
+        "course": 1
+    }
+},
+{
+    "model": "materials.lesson",
+    "pk": 3,
+    "fields": {
+        "name": "Python def func()",
+        "description": "base func",
+        "image": "",
+        "video_url": "https://vkvideo.ru/video-1128",
+        "course": 1
+    }
+},
+{
+    "model": "materials.lesson",
+    "pk": 4,
+    "fields": {
+        "name": "Django DRF 1.0 start",
+        "description": "start",
+        "image": "",
+        "video_url": "https://vkvideo.ru/video-1128",
+        "course": 2
+    }
+},
+{
+    "model": "materials.lesson",
+    "pk": 5,
+    "fields": {
+        "name": "Django DRF 1.1 good practik",
+        "description": "sample practikum",
+        "image": "",
+        "video_url": "https://vkvideo.ru/video-1128777",
+        "course": 2
+    }
+},
+{
+    "model": "materials.lesson",
+    "pk": 6,
+    "fields": {
+        "name": "Django DRF 1.2 serializer",
+        "description": "practikum",
+        "image": "",
+        "video_url": "https://vkvideo.ru/video-8888777",
+        "course": 2
+    }
+}
+]
