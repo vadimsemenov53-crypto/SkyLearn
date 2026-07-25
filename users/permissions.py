@@ -11,10 +11,19 @@ class IsModer(permissions.BasePermission):
 
 class IsCreator(permissions.BasePermission):
     """ Проверяет, является ли пользователь владельцем. """
-    message = "Пользователь не является владельцем."
 
     def has_object_permission(self, request, view, obj):
         if obj.creator == request.user:
+            return True
+
+        return False
+
+
+class IsProfile(permissions.BasePermission):
+    """ Проверяет, является ли пользователь владельцем профиля. """
+
+    def has_object_permission(self, request, view, obj):
+        if obj == request.user:
             return True
 
         return False

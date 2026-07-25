@@ -34,3 +34,13 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+
+
+class UserPublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "email",
+        )
