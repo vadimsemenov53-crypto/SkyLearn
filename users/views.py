@@ -1,11 +1,11 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 
 from users.models import Payments, User
 from users.permissions import IsProfile
-from users.serializers import PaymentsSerializer, UserSerializer, UserPublicSerializer
-from rest_framework.permissions import AllowAny
+from users.serializers import PaymentsSerializer, UserPublicSerializer, UserSerializer
 
 
 class UserViewSet(ModelViewSet):
@@ -24,10 +24,10 @@ class UserViewSet(ModelViewSet):
         return UserSerializer
 
     def get_permissions(self):
-        if self.action == 'create':
+        if self.action == "create":
             self.permission_classes = (AllowAny,)
 
-        elif self.action in ['update', "partial_update"]:
+        elif self.action in ["update", "partial_update"]:
             self.permission_classes = (IsProfile,)
 
         return super().get_permissions()

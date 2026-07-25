@@ -3,8 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from materials.models import Course, Lesson
 from materials.serializers import CourseSerializer, LessonSerializer
-
-from users.permissions import IsModer, IsCreator
+from users.permissions import IsCreator, IsModer
 
 
 class CourseViewSet(ModelViewSet):
@@ -14,24 +13,23 @@ class CourseViewSet(ModelViewSet):
     serializer_class = CourseSerializer
 
     def perform_create(self, serializer):
-        """ Метод отвечающий за автоматическое заполнение владельца """
+        """Метод отвечающий за автоматическое заполнение владельца"""
         course = serializer.save()
         course.creator = self.request.user
         course.save()
 
     def get_permissions(self):
-        """ Метод отвечающий за перераспределение прав доступа """
-        if self.action == 'create':
+        """Метод отвечающий за перераспределение прав доступа"""
+        if self.action == "create":
             self.permission_classes = (~IsModer,)
 
-        elif self.action in ['update', 'retrieve']:
+        elif self.action in ["update", "retrieve"]:
             self.permission_classes = (IsModer | IsCreator,)
 
-        elif self.action == 'destroy':
+        elif self.action == "destroy":
             self.permission_classes = (~IsModer | IsCreator,)
 
         return super().get_permissions()
-
 
 
 class LessonCreateAPIView(CreateAPIView):
@@ -42,7 +40,7 @@ class LessonCreateAPIView(CreateAPIView):
     permission_classes = (~IsModer,)
 
     def perform_create(self, serializer):
-        """ Метод отвечающий за автоматическое заполнение владельца """
+        """Метод отвечающий за автоматическое заполнение владельца"""
         lesson = serializer.save()
         lesson.creator = self.request.user
         lesson.save()

@@ -36,7 +36,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-
 class UserPublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
