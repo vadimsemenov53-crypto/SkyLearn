@@ -36,7 +36,7 @@ class Course(models.Model):
 
 
 class Lesson(models.Model):
-    """Модель для представления урока."""
+    """Модель для представления Урока."""
 
     name = models.CharField(max_length=100, verbose_name="Название", help_text="Введите название урока")
     description = models.TextField(

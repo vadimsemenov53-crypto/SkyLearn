@@ -92,3 +92,31 @@ class Payments(models.Model):
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
         ordering = ("-payment_date",)
+
+
+
+class Subscription(models.Model):
+    """ Модель для представления Подписки. """
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        help_text="Укажите пользователя",
+        related_name="subscriptions",
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        verbose_name="Курс",
+        help_text="Выбери курс урока",
+        related_name="subscriptions",
+    )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="Активность"
+    )
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
+        unique_together = ("user", "course")
