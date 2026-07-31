@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
@@ -6,13 +7,13 @@ from users.models import Payments, User
 
 
 class Command(BaseCommand):
-
     help = "Загрузка тестовых данных. Перед применением удаляет все данные из БД."
 
     def handle(self, *args, **options):
         Course.objects.all().delete()
         Lesson.objects.all().delete()
         User.objects.all().delete()
+        Group.objects.all().delete()
         Payments.objects.all().delete()
 
         self.stdout.write(self.style.SUCCESS("Все данные удалены!"))
@@ -22,6 +23,7 @@ class Command(BaseCommand):
             call_command("loaddata", "lesson.json")
             call_command("loaddata", "users.json")
             call_command("loaddata", "payments.json")
+            call_command("loaddata", "groups.json")
 
             self.stdout.write(self.style.SUCCESS("Фикстуры загружены! Данные о покупках созданы!"))
 

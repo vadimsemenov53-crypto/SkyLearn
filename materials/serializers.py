@@ -21,6 +21,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "description",
             "count_lessons_in_course",
             "lesson",
+            "creator",
         )
 
     def get_count_lessons_in_course(self, course):

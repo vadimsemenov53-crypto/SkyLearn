@@ -11,6 +11,7 @@ class PaymentsSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     payments = PaymentsSerializer(many=True, read_only=True)
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
@@ -22,4 +23,23 @@ class UserSerializer(serializers.ModelSerializer):
             "phone",
             "city",
             "payments",
+            "password",
+        )
+
+    def create(self, validated_data):
+        password = validated_data.pop("password")
+        user = User(**validated_data)
+        user.is_active = True
+        user.set_password(password)
+        user.save()
+
+        return user
+
+
+class UserPublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "email",
         )
