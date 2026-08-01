@@ -17,7 +17,8 @@ dependencies = [
     "python-dotenv (>=1.2.2,<2.0.0)",
     "django-phonenumber-field[phonenumbers] (>=8.4.0,<9.0.0)",
     "django-filter (>=26.1,<27.0)",
-    "djangorestframework-simplejwt (>=5.5.1,<6.0.0)"
+    "djangorestframework-simplejwt (>=5.5.1,<6.0.0)",
+    "coverage (>=7.15.2,<8.0.0)"
 ]
 
 
