@@ -1,12 +1,15 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from users.models import Payments, User
+from materials.models import Course
+from users.models import Payments, User, Subscription
 from users.permissions import IsProfile
 from users.serializers import PaymentsSerializer, UserPublicSerializer, UserSerializer
-
 
 class UserViewSet(ModelViewSet):
     """Контроллер для модели User использующий ModelViewSet"""
@@ -45,3 +48,32 @@ class PaymentsViewSet(ModelViewSet):
         "lesson",
         "payment_method",
     ]
+
+
+class SubscriptionAPIView(APIView):
+    """ Контроллер для модели Subscription. """
+    def post(self, *args, **kwargs):
+        """ Переопредление метода POST. """
+        user = self.request.user
+        course_id = self.request.data.get('course_id')
+        course = get_object_or_404(Course, id=course_id)
+
+        subs_obj = Subscription.objects.filter(
+            user=user,
+            course=course,
+        )
+
+        if subs_obj.exists():
+            subs_obj.delete()
+            message = "Подписка успешно удалена."
+
+        else:
+            Subscription.objects.create(
+                user=user,
+                course=course,
+            )
+            message = "Подписка успешно добавлена."
+
+
+        return Response({"message": message})
+
