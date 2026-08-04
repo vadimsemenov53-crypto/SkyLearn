@@ -1,4 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from rest_framework import status
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
@@ -9,12 +12,15 @@ from rest_framework.viewsets import ModelViewSet
 from materials.models import Course
 from users.models import Payments, User, Subscription
 from users.permissions import IsProfile
-from users.serializers import PaymentsSerializer, UserPublicSerializer, UserSerializer
+from users.serializers import PaymentsSerializer, UserPublicSerializer, UserSerializer, SubscriptionSerializer
 
 class UserViewSet(ModelViewSet):
     """Контроллер для модели User использующий ModelViewSet"""
-
     queryset = User.objects.all()
+
+    @swagger_auto_schema(responses={200: UserPublicSerializer})
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -52,6 +58,20 @@ class PaymentsViewSet(ModelViewSet):
 
 class SubscriptionAPIView(APIView):
     """ Контроллер для модели Subscription. """
+    @swagger_auto_schema(
+        operation_summary="Подписка на курс",
+        operation_description="""
+            Если пользователь уже подписан на курс — подписка удаляется.
+            Если пользователь не подписан — создается новая подписка.
+            """,
+        request_body=SubscriptionSerializer,
+        responses={
+            status.HTTP_200_OK: openapi.Response(
+                description="Результат операции (добавлена / удалена)"
+            ),
+            status.HTTP_404_NOT_FOUND: "Курс не найден",
+        },
+    )
     def post(self, *args, **kwargs):
         """ Переопредление метода POST. """
         user = self.request.user
