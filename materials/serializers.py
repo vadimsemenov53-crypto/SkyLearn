@@ -6,7 +6,7 @@ from users.models import Subscription
 
 
 class LessonSerializer(serializers.ModelSerializer):
-    video_url = serializers.URLField(validators=[YouTubeValidateVideoURL()])
+    video_url = serializers.URLField(validators=[YouTubeValidateVideoURL()], help_text="Ссылка на видео YouTube")
 
     class Meta:
         model = Lesson
