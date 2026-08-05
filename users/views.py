@@ -14,6 +14,8 @@ from users.models import Payments, User, Subscription
 from users.permissions import IsProfile
 from users.serializers import PaymentsSerializer, UserPublicSerializer, UserSerializer, SubscriptionSerializer
 
+from users.services import create_stripe_product, create_stripe_price, create_stripe_session
+
 class UserViewSet(ModelViewSet):
     """Контроллер для модели User использующий ModelViewSet"""
     queryset = User.objects.all()
@@ -56,9 +58,20 @@ class PaymentsViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         """ Переопределение метода создания: Пользователь -> фактический кто создал запрос, сумма берется из модели курса. """
-        payment = serializer.save(user=self.request.user)
-        payment.amount = payment.course.amount
+        payment = serializer.save(
+            user=self.request.user,
+            amount=serializer.validated_data["course"].amount,
+        )
+
+        product = create_stripe_product(payment.course)
+        price = create_stripe_price(product, payment.amount)
+        session_id, payment_link = create_stripe_session(price.id)
+
+        payment.session_id = session_id
+        payment.link = payment_link
         payment.save()
+
+
 
 
 class SubscriptionAPIView(APIView):

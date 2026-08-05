@@ -1,14 +1,13 @@
 import stripe
 from config.settings import STRIPE_API_KEY
-from materials.models import Course
 
 stripe.api_key = STRIPE_API_KEY
 
-def create_stripe_product(object_course: Course):
+def create_stripe_product(course):
     """ Функция создания продукта в Stripe. """
     product = stripe.Product.create(
-        name=object_course.name,
-        description = object_course.description
+        name=course.name,
+        description = course.description
     )
 
     return product
