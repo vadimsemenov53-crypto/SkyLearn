@@ -51,9 +51,14 @@ class PaymentsViewSet(ModelViewSet):
     ordering_fields = ("payment_date",)
     filterset_fields = [
         "course",
-        "lesson",
         "payment_method",
     ]
+
+    def perform_create(self, serializer):
+        """ Переопределение метода создания: Пользователь -> фактический кто создал запрос, сумма берется из модели курса. """
+        payment = serializer.save(user=self.request.user)
+        payment.amount = payment.course.amount
+        payment.save()
 
 
 class SubscriptionAPIView(APIView):

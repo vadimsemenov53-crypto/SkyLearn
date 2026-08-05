@@ -69,20 +69,28 @@ class Payments(models.Model):
         verbose_name="Купленный курс",
         help_text="Укажите купленный курс",
     )
-    lesson = models.ForeignKey(
-        Lesson,
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-        verbose_name="Купленный урок",
-        help_text="Укажите купленный урок",
-    )
     amount = models.PositiveIntegerField(verbose_name="Сумма покупки", help_text="Укажите сумму покупки")
     payment_method = models.CharField(
         max_length=10,
         choices=PAYMENTS_METHOD_CHOICES,
         default=P_REMITTANCE,
         verbose_name="Способ оплаты",
+    )
+
+    session_id = models.CharField(
+        max_length=255,
+        verbose_name="Id сессии",
+        help_text="Укажите Id сессии",
+        blank=True,
+        null=True,
+    )
+
+    link = models.URLField(
+        max_length=1000,
+        verbose_name="Ссылка оплаты",
+        help_text="Укажите ссылку для оплаты",
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
