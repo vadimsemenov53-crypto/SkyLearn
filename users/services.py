@@ -32,3 +32,11 @@ def create_stripe_session(price_id):
     )
 
     return session.id, session.url
+
+
+def create_stripe_payment(course):
+    """ Вспомогательная функция объединяющая логику для Stipe (create_product / price / session) """
+    product = create_stripe_product(course)
+    price = create_stripe_price(product, course.amount)
+
+    return create_stripe_session(price.id)

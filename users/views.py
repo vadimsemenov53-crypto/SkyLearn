@@ -1,7 +1,9 @@
+import stripe
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
@@ -14,7 +16,7 @@ from users.models import Payments, User, Subscription
 from users.permissions import IsProfile
 from users.serializers import PaymentsSerializer, UserPublicSerializer, UserSerializer, SubscriptionSerializer
 
-from users.services import create_stripe_product, create_stripe_price, create_stripe_session
+from users.services import create_stripe_payment
 
 class UserViewSet(ModelViewSet):
     """Контроллер для модели User использующий ModelViewSet"""
@@ -58,18 +60,20 @@ class PaymentsViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         """ Переопределение метода создания: Пользователь -> фактический кто создал запрос, сумма берется из модели курса. """
-        payment = serializer.save(
+        course = serializer.validated_data["course"]
+
+        try:
+            session_id, link = create_stripe_payment(course=course)
+
+        except stripe.StripeError as error:
+            raise ValidationError(f"Ошибка Stripe: {str(error)}")
+
+        serializer.save(
             user=self.request.user,
-            amount=serializer.validated_data["course"].amount,
+            amount=course.amount,
+            session_id=session_id,
+            link=link,
         )
-
-        product = create_stripe_product(payment.course)
-        price = create_stripe_price(product, payment.amount)
-        session_id, payment_link = create_stripe_session(price.id)
-
-        payment.session_id = session_id
-        payment.link = payment_link
-        payment.save()
 
 
 
