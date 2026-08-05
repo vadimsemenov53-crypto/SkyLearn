@@ -45,12 +45,12 @@ class User(AbstractUser):
 class Payments(models.Model):
     """Модель для представления платежей."""
 
-    P_CASH = "cash"
-    P_REMITTANCE = "remittance"
+    P_PENDING = "pending"
+    P_PAID = "paid"
 
-    PAYMENTS_METHOD_CHOICES = [
-        (P_CASH, "Наличные"),
-        (P_REMITTANCE, "Перевод"),
+    PAYMENTS_STATUS_CHOICES = [
+        (P_PENDING, "Ожидает оплаты"),
+        (P_PAID, "Оплачено"),
     ]
 
     user = models.ForeignKey(
@@ -72,8 +72,8 @@ class Payments(models.Model):
     amount = models.PositiveIntegerField(verbose_name="Сумма покупки", help_text="Укажите сумму покупки")
     payment_method = models.CharField(
         max_length=10,
-        choices=PAYMENTS_METHOD_CHOICES,
-        default=P_REMITTANCE,
+        choices=PAYMENTS_STATUS_CHOICES,
+        default=P_PENDING,
         verbose_name="Способ оплаты",
     )
 
