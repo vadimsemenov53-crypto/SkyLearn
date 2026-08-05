@@ -16,7 +16,7 @@ from users.models import Payments, User, Subscription
 from users.permissions import IsProfile
 from users.serializers import PaymentsSerializer, UserPublicSerializer, UserSerializer, SubscriptionSerializer
 
-from users.services import create_stripe_payment
+from users.services import create_stripe_payment, check_stripe_payment
 
 class UserViewSet(ModelViewSet):
     """Контроллер для модели User использующий ModelViewSet"""
@@ -73,6 +73,28 @@ class PaymentsViewSet(ModelViewSet):
             amount=course.amount,
             session_id=session_id,
             link=link,
+            status=course.P_PENDING,
+        )
+
+
+class PaymentStatusAPIView(APIView):
+    """ Контроллер проверки статуса платежа Stripe. """
+
+    def get(self, request, pk):
+        """ Метод получения данных о статусе платежа. """
+        payment = get_object_or_404(Payments, id=pk, user=request.user)
+
+        status_stripe = check_stripe_payment(payment.session_id)
+
+        if status_stripe == "paid":
+            payment.payment_method = Payments.P_PAID
+            payment.save()
+
+        return Response(
+            {
+                "payment_id": payment.id,
+                "status": payment.payment_method,
+            }
         )
 
 

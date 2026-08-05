@@ -74,7 +74,7 @@ class Payments(models.Model):
         max_length=10,
         choices=PAYMENTS_STATUS_CHOICES,
         default=P_PENDING,
-        verbose_name="Способ оплаты",
+        verbose_name="Статус оплаты",
     )
 
     session_id = models.CharField(

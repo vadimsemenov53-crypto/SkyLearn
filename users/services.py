@@ -40,3 +40,12 @@ def create_stripe_payment(course):
     price = create_stripe_price(product, course.amount)
 
     return create_stripe_session(price.id)
+
+
+def check_stripe_payment(session_id):
+    """Проверка статуса оплаты в Stripe."""
+    session = stripe.checkout.Session.retrieve(
+        session_id
+    )
+
+    return session.payment_status
