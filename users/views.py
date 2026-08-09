@@ -13,8 +13,9 @@ from rest_framework.viewsets import ModelViewSet
 
 from materials.models import Course
 from users.models import Payments, User, Subscription
-from users.permissions import IsProfile
-from users.serializers import PaymentsSerializer, UserPublicSerializer, UserSerializer, SubscriptionSerializer
+from users.permissions import IsProfile, IsModer
+from users.serializers import PaymentsSerializer, UserPublicSerializer, UserSerializer, SubscriptionSerializer, \
+    SubscriptionAllSerializer
 
 from users.services import create_stripe_payment, check_stripe_payment
 
@@ -99,6 +100,16 @@ class PaymentStatusAPIView(APIView):
 
 
 
+class SubscriptionViewSet(ModelViewSet):
+    """Контроллер для модели Course использующий ModelViewSet"""
+    serializer_class = SubscriptionAllSerializer
+    permission_classes = (~IsModer,)
+
+    def get_queryset(self):
+        """ Метод возвращает подписки пользователя. """
+        return Subscription.objects.filter(
+            user=self.request.user
+        )
 
 class SubscriptionAPIView(APIView):
     """ Контроллер для модели Subscription. """

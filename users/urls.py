@@ -4,13 +4,14 @@ from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from users.apps import UsersConfig
-from users.views import PaymentsViewSet, UserViewSet, PaymentStatusAPIView
+from users.views import PaymentsViewSet, UserViewSet, PaymentStatusAPIView, SubscriptionViewSet
 
 app_name = UsersConfig.name
 
 router = SimpleRouter()
 router.register(r"users", UserViewSet, basename="users")
 router.register(r"payments", PaymentsViewSet, basename="payments")
+router.register(r"subs", SubscriptionViewSet, basename="subscription")
 
 urlpatterns = [
     path(

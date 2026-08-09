@@ -29,6 +29,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "lesson",
             "creator",
             "is_subscribed",
+            "updated_at",
         )
 
     def get_count_lessons_in_course(self, course):

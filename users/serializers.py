@@ -2,6 +2,11 @@ from rest_framework import serializers
 
 from users.models import Payments, User, Subscription
 
+class SubscriptionAllSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = "__all__"
+
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payments
