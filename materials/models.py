@@ -37,6 +37,17 @@ class Course(models.Model):
         blank=True,
     )
 
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Дата обновления",
+        help_text="Укажите дату обновления курса",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        return f"{self.name} - {self.amount} руб."
+
     class Meta:
         verbose_name = "Курс"
         verbose_name_plural = "Курсы"
@@ -79,6 +90,18 @@ class Lesson(models.Model):
         null=True,
         blank=True,
     )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Дата обновления",
+        help_text="Укажите дату обновления урока",
+        null=True,
+        blank=True,
+    )
+
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = "Урок"

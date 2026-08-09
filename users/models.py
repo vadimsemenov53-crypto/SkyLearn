@@ -124,6 +124,13 @@ class Subscription(models.Model):
         verbose_name="Активность"
     )
 
+    last_update_materials = models.DateTimeField(
+        verbose_name="Последнее обновление материала",
+        help_text="Укажите дату последнего обновления материала",
+        null=True,
+        blank=True,
+    )
+
     class Meta:
         verbose_name = "Подписка"
         verbose_name_plural = "Подписки"

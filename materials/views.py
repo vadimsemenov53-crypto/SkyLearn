@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.viewsets import ModelViewSet
 
@@ -70,6 +71,13 @@ class LessonUpdateAPIView(UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = (IsModer | IsCreator,)
+
+    def perform_update(self, serializer):
+        """ Метод отвечающий за обновление урока. """
+        lesson = serializer.save()
+
+        if lesson.course:
+            lesson.course.save()
 
 
 class LessonDestroyAPIView(DestroyAPIView):
