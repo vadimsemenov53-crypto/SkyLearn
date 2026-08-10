@@ -85,6 +85,7 @@ class LessonUpdateAPIView(UpdateAPIView):
 
         if lesson.course:
             lesson.course.save()
+            send_information_about_update.delay(lesson.course.id)
 
 
 class LessonDestroyAPIView(DestroyAPIView):
