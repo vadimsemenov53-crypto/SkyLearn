@@ -6,6 +6,7 @@ from materials.models import Course, Lesson
 from materials.serializers import CourseSerializer, LessonSerializer
 from materials.paginations import CustomPagination
 from users.permissions import IsCreator, IsModer
+from materials.tasks import send_information_about_update
 
 
 class CourseViewSet(ModelViewSet):
@@ -33,6 +34,12 @@ class CourseViewSet(ModelViewSet):
             self.permission_classes = (~IsModer | IsCreator,)
 
         return super().get_permissions()
+
+    def perform_update(self, serializer):
+        """ Метод отвечающий за обновление курса и реализацию выполнения отложенной задачи. """
+        course = serializer.save()
+
+        send_information_about_update.delay(course.id)
 
 
 class LessonCreateAPIView(CreateAPIView):
