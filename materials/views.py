@@ -3,10 +3,10 @@ from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, 
 from rest_framework.viewsets import ModelViewSet
 
 from materials.models import Course, Lesson
-from materials.serializers import CourseSerializer, LessonSerializer
 from materials.paginations import CustomPagination
-from users.permissions import IsCreator, IsModer
+from materials.serializers import CourseSerializer, LessonSerializer
 from materials.tasks import send_information_about_update
+from users.permissions import IsCreator, IsModer
 
 
 class CourseViewSet(ModelViewSet):
@@ -36,7 +36,7 @@ class CourseViewSet(ModelViewSet):
         return super().get_permissions()
 
     def perform_update(self, serializer):
-        """ Метод отвечающий за обновление курса и реализацию выполнения отложенной задачи. """
+        """Метод отвечающий за обновление курса и реализацию выполнения отложенной задачи."""
         course = serializer.save()
 
         send_information_about_update.delay(course.id)
@@ -80,7 +80,7 @@ class LessonUpdateAPIView(UpdateAPIView):
     permission_classes = (IsModer | IsCreator,)
 
     def perform_update(self, serializer):
-        """ Метод отвечающий за обновление урока. """
+        """Метод отвечающий за обновление урока."""
         lesson = serializer.save()
 
         if lesson.course:

@@ -1,28 +1,29 @@
 import stripe
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
-from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from materials.models import Course
-from users.models import Payments, User, Subscription
-from users.permissions import IsProfile, IsModer
-from users.serializers import PaymentsSerializer, UserPublicSerializer, UserSerializer, SubscriptionSerializer, \
-    SubscriptionAllSerializer
+from users.models import Payments, Subscription, User
+from users.permissions import IsModer, IsProfile
+from users.serializers import (PaymentsSerializer, SubscriptionAllSerializer, SubscriptionSerializer,
+                               UserPublicSerializer, UserSerializer)
+from users.services import check_stripe_payment, create_stripe_payment
 
-from users.services import create_stripe_payment, check_stripe_payment
 
 class UserViewSet(ModelViewSet):
     """Контроллер для модели User использующий ModelViewSet"""
+
     queryset = User.objects.all()
 
     @swagger_auto_schema(responses={200: UserPublicSerializer})
@@ -62,7 +63,7 @@ class PaymentsViewSet(ModelViewSet):
     ]
 
     def perform_create(self, serializer):
-        """ Переопределение метода создания: Пользователь -> фактический кто создал запрос, сумма берется из модели курса. """
+        """Переопределение метода создания: Пользователь -> фактический кто создал запрос, сумма берется из модели курса."""
         course = serializer.validated_data["course"]
 
         try:
@@ -81,10 +82,10 @@ class PaymentsViewSet(ModelViewSet):
 
 
 class PaymentStatusAPIView(APIView):
-    """ Контроллер проверки статуса платежа Stripe. """
+    """Контроллер проверки статуса платежа Stripe."""
 
     def get(self, request, pk):
-        """ Метод получения данных о статусе платежа. """
+        """Метод получения данных о статусе платежа."""
         payment = get_object_or_404(Payments, id=pk, user=request.user)
 
         status_stripe = check_stripe_payment(payment.session_id)
@@ -101,31 +102,29 @@ class PaymentStatusAPIView(APIView):
         )
 
 
-
 class SubscriptionViewSet(ModelViewSet):
     """Контроллер для модели Course использующий ModelViewSet"""
+
     serializer_class = SubscriptionAllSerializer
     permission_classes = (~IsModer,)
 
     def get_queryset(self):
-        """ Метод возвращает подписки пользователя. """
-        return Subscription.objects.filter(
-            user=self.request.user
-        )
+        """Метод возвращает подписки пользователя."""
+        return Subscription.objects.filter(user=self.request.user)
 
     @action(detail=True, methods=("post",))
     def seen_update(self, request, pk):
-        """ Метод отмечает обновление курса как просмотренное (проставляет дату просмотра). """
+        """Метод отмечает обновление курса как просмотренное (проставляет дату просмотра)."""
         subs = get_object_or_404(Subscription, pk=pk, user=request.user)
         subs.last_seen_update_at = timezone.now()
         subs.save(update_fields=["last_seen_update_at"])
 
-        return Response({
-            "message": "Обновление отмечено как просмотренное."
-        })
+        return Response({"message": "Обновление отмечено как просмотренное."})
+
 
 class SubscriptionAPIView(APIView):
-    """ Контроллер для модели Subscription. """
+    """Контроллер для модели Subscription."""
+
     @swagger_auto_schema(
         operation_summary="Подписка на курс",
         operation_description="""
@@ -134,16 +133,14 @@ class SubscriptionAPIView(APIView):
             """,
         request_body=SubscriptionSerializer,
         responses={
-            status.HTTP_200_OK: openapi.Response(
-                description="Результат операции (добавлена / удалена)"
-            ),
+            status.HTTP_200_OK: openapi.Response(description="Результат операции (добавлена / удалена)"),
             status.HTTP_404_NOT_FOUND: "Курс не найден",
         },
     )
     def post(self, *args, **kwargs):
-        """ Переопредление метода POST. """
+        """Переопредление метода POST."""
         user = self.request.user
-        course_id = self.request.data.get('course_id')
+        course_id = self.request.data.get("course_id")
         course = get_object_or_404(Course, id=course_id)
 
         subs_obj = Subscription.objects.filter(
@@ -162,6 +159,4 @@ class SubscriptionAPIView(APIView):
             )
             message = "Подписка успешно добавлена."
 
-
         return Response({"message": message})
-

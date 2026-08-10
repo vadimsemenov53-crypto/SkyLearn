@@ -114,9 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'ru'
+LANGUAGE_CODE = "ru"
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
@@ -162,15 +162,11 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabasesScheduler"
 CELERY_BEAT_SCHEDULE = {
     "send_information_about_update_periodical": {
         "task": "materials.tasks.send_information_about_update_periodical",  # Путь к задаче
-        "schedule": timedelta(
-            hours=1
-        ),  # Расписание выполнения задачи (например, каждые 10 минут)
+        "schedule": timedelta(hours=1),  # Расписание выполнения задачи (например, каждые 10 минут)
     },
     "check_last_login_user": {
         "task": "users.tasks.check_last_login_user",  # Путь к задаче
-        "schedule": timedelta(
-            days=1
-        ),  # Расписание выполнения задачи (например, каждые 10 минут)
+        "schedule": timedelta(days=1),  # Расписание выполнения задачи (например, каждые 10 минут)
     },
 }
 
