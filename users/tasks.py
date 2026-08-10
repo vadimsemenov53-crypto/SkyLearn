@@ -9,7 +9,7 @@ def check_last_login_user():
     """ Периодическая задача для проверки последнего входа пользователя.
      Если пользователь не заходил месяц и более его аккаунт блокируется
      -> is_active = False."""
-    month_ago = timezone.now() - timedelta(minutes=2)
+    month_ago = timezone.now() - timedelta(days=30)
     days_for_login = timezone.now() - timedelta(days=10)
     users = User.objects.filter(is_active=True)
 

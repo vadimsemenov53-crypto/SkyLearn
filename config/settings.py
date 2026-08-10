@@ -169,7 +169,7 @@ CELERY_BEAT_SCHEDULE = {
     "check_last_login_user": {
         "task": "users.tasks.check_last_login_user",  # Путь к задаче
         "schedule": timedelta(
-            minutes=1
+            days=1
         ),  # Расписание выполнения задачи (например, каждые 10 минут)
     },
 }
