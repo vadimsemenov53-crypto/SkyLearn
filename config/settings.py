@@ -166,6 +166,12 @@ CELERY_BEAT_SCHEDULE = {
             hours=1
         ),  # Расписание выполнения задачи (например, каждые 10 минут)
     },
+    "check_last_login_user": {
+        "task": "users.tasks.check_last_login_user",  # Путь к задаче
+        "schedule": timedelta(
+            minutes=1
+        ),  # Расписание выполнения задачи (например, каждые 10 минут)
+    },
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
