@@ -115,7 +115,7 @@ class SubscriptionViewSet(ModelViewSet):
 
     @action(detail=True, methods=("post",))
     def seen_update(self, request, pk):
-        """ Метод отмечает обновление курса как просмотренное. """
+        """ Метод отмечает обновление курса как просмотренное (проставляет дату просмотра). """
         subs = get_object_or_404(Subscription, pk=pk, user=request.user)
         subs.last_seen_update_at = timezone.now()
         subs.save(update_fields=["last_seen_update_at"])

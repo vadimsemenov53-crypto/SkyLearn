@@ -160,10 +160,10 @@ CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabasesScheduler"
 
 CELERY_BEAT_SCHEDULE = {
-    "adds": {
-        "task": "materials.tasks.adds",  # Путь к задаче
+    "send_information_about_update_periodical": {
+        "task": "materials.tasks.send_information_about_update_periodical",  # Путь к задаче
         "schedule": timedelta(
-            seconds=10
+            hours=1
         ),  # Расписание выполнения задачи (например, каждые 10 минут)
     },
 }
