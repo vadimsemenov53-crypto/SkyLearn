@@ -102,9 +102,9 @@ class Payments(models.Model):
         ordering = ("-payment_date",)
 
 
-
 class Subscription(models.Model):
-    """ Модель для представления Подписки. """
+    """Модель для представления Подписки."""
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -119,9 +119,13 @@ class Subscription(models.Model):
         help_text="Выбери курс урока",
         related_name="subscriptions",
     )
-    is_active = models.BooleanField(
-        default=True,
-        verbose_name="Активность"
+    is_active = models.BooleanField(default=True, verbose_name="Активность")
+
+    last_seen_update_at = models.DateTimeField(
+        verbose_name="Последнее обновление материала",
+        help_text="Укажите дату последнего обновления материала",
+        null=True,
+        blank=True,
     )
 
     class Meta:

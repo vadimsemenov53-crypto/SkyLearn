@@ -1,9 +1,11 @@
+from django.utils import timezone
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.viewsets import ModelViewSet
 
 from materials.models import Course, Lesson
-from materials.serializers import CourseSerializer, LessonSerializer
 from materials.paginations import CustomPagination
+from materials.serializers import CourseSerializer, LessonSerializer
+from materials.tasks import send_information_about_update
 from users.permissions import IsCreator, IsModer
 
 
@@ -32,6 +34,12 @@ class CourseViewSet(ModelViewSet):
             self.permission_classes = (~IsModer | IsCreator,)
 
         return super().get_permissions()
+
+    def perform_update(self, serializer):
+        """Метод отвечающий за обновление курса и реализацию выполнения отложенной задачи."""
+        course = serializer.save()
+
+        send_information_about_update.delay(course.id)
 
 
 class LessonCreateAPIView(CreateAPIView):
@@ -70,6 +78,14 @@ class LessonUpdateAPIView(UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = (IsModer | IsCreator,)
+
+    def perform_update(self, serializer):
+        """Метод отвечающий за обновление урока."""
+        lesson = serializer.save()
+
+        if lesson.course:
+            lesson.course.save()
+            send_information_about_update.delay(lesson.course.id)
 
 
 class LessonDestroyAPIView(DestroyAPIView):

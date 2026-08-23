@@ -29,14 +29,15 @@ class CourseSerializer(serializers.ModelSerializer):
             "lesson",
             "creator",
             "is_subscribed",
+            "updated_at",
         )
 
     def get_count_lessons_in_course(self, course):
-        """ Метод подсчета уроков на данном курсе. """
+        """Метод подсчета уроков на данном курсе."""
         return Lesson.objects.filter(course=course).count()
 
     def get_is_subscribed(self, obj):
-        """ Метод получения активности подписки пользователя на данный курс. """
-        user = self.context['request'].user
+        """Метод получения активности подписки пользователя на данный курс."""
+        user = self.context["request"].user
 
         return Subscription.objects.filter(user=user, course=obj).exists()
