@@ -131,7 +131,7 @@ docker compose exec web python manage.py makemigrations
 Создать администратора Django:
 
 ```bash
-docker compose exec web python manage.py createsuperuser
+docker compose exec web python manage.py csu
 ```
 
 ---
