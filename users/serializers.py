@@ -1,0 +1,64 @@
+from rest_framework import serializers
+
+from users.models import Payments, Subscription, User
+
+
+class SubscriptionAllSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = "__all__"
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payments
+        fields = "__all__"
+
+
+class PaymentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payments
+        fields = "__all__"
+        read_only_fields = (
+            "user",
+            "amount",
+            "session_id",
+            "link",
+            "payment_date",
+        )
+
+
+class UserSerializer(serializers.ModelSerializer):
+    payments = PaymentsSerializer(many=True, read_only=True)
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "phone",
+            "city",
+            "payments",
+            "password",
+        )
+
+    def create(self, validated_data):
+        password = validated_data.pop("password")
+        user = User(**validated_data)
+        user.is_active = True
+        user.set_password(password)
+        user.save()
+
+        return user
+
+
+class UserPublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "email",
+        )
