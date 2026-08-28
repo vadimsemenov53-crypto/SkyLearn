@@ -1,8 +1,8 @@
 services:
   web:
     container_name: skylearn
-    build: .
-    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
+    image: ${DOCKER_HUB_USERNAME}/skylearn:${IMAGE_TAG:-latest}
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
@@ -63,7 +63,7 @@ services:
 
   celery_worker:
     container_name: celery_worker
-    build: .
+    image: ${DOCKER_HUB_USERNAME}/skylearn:${IMAGE_TAG:-latest}
     command: sh -c "celery -A config worker --loglevel=info"
     env_file:
       - ./.env
@@ -75,7 +75,7 @@ services:
 
   celery_beat:
     container_name: celery_beat
-    build: .
+    image: ${DOCKER_HUB_USERNAME}/skylearn:${IMAGE_TAG:-latest}
     command: sh -c "celery -A config beat --loglevel=info"
     env_file:
       - ./.env
