@@ -54,4 +54,4 @@ class UserTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        self.assertEqual(response.json(), {"detail": "No active account found with the given credentials"})
+        self.assertEqual(response.json(), {"detail": "Не найдено активной учетной записи с указанными данными"})

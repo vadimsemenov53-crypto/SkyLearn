@@ -10,7 +10,7 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = "__all__"
+        exclude = ("updated_at",)
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -29,7 +29,6 @@ class CourseSerializer(serializers.ModelSerializer):
             "lesson",
             "creator",
             "is_subscribed",
-            "updated_at",
         )
 
     def get_count_lessons_in_course(self, course):
