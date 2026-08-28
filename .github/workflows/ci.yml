@@ -94,23 +94,23 @@ jobs:
       - name: Run Flake8
         run: poetry run flake8 .
 
-#  build:
-#    runs-on: ubuntu-latest
-#    needs: test
-#
-#    steps:
-#      - name: Check out code
-#        uses: actions/checkout@v4
-#
-#      - name: Log in to Docker Hub
-#        run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-#
-#      - name: Build Docker image
-#        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
-#
-#      - name: Push Docker image to Docker Hub
-#        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-#
+  build:
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/skylearn:${{ github.sha }} .
+
+      - name: Push Docker image to Docker Hub
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/skylearn:${{ github.sha }}
+
 #  deploy:
 #    runs-on: ubuntu-latest
 #    needs: build
