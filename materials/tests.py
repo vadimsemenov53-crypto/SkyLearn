@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.contrib.auth.models import Group
 from django.urls import reverse
 from rest_framework import status
@@ -113,7 +115,8 @@ class CourseTestCase(APITestCase):
 
         self.assertEqual(response.json(), {"detail": "У вас недостаточно прав для выполнения данного действия."})
 
-    def test_course_update(self):
+    @patch("materials.views.send_information_about_update.delay")
+    def test_course_update(self, mock_delay):
         """Тестирование обновление данных курса для -> materials:course-detail."""
         url = reverse("materials:course-detail", args=(self.course.pk,))
         data = {
