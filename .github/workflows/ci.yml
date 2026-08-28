@@ -14,8 +14,10 @@ jobs:
       NAME: django_project
       USER: postgres
       PASSWORD: 7777
-      HOST: db
+      HOST: localhost
       PORT: 5432
+
+      CSRF_TRUSTED_ORIGINS: "http://localhost"
 
       EMAIL_HOST_USER: example1111@yandex.ru
       EMAIL_HOST_PASSWORD: pppzzzpzpz
