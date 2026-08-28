@@ -45,10 +45,15 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-          cache: "poetry"
 
       - name: Install Poetry
         run: pipx install poetry==2.2.1
+
+      - name: Set up Poetry cache
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: "poetry"
 
       - name: Install dependencies
         run: poetry install --no-interaction --no-ansi --no-root
@@ -71,10 +76,15 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-          cache: "poetry"
 
       - name: Install Poetry
         run: pipx install poetry==2.2.1
+
+      - name: Set up Poetry cache
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: "poetry"
 
       - name: Install dependencies
         run: poetry install --no-interaction --no-ansi --no-root
