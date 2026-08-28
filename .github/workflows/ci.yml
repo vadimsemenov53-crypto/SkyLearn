@@ -3,29 +3,8 @@ name: Django CI
 on: [ push, pull_request ]
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-
-      - name: Install Poetry
-        run: |
-          pipx install poetry==2.2.1
-          poetry add flake8
-
-      - name: Run Flake8
-        run: poetry run flake8 .
-
   test:
     runs-on: ubuntu-latest
-    needs: lint
 
     env:
       SECRET_KEY: django-secret
@@ -35,7 +14,7 @@ jobs:
       NAME: django_project
       USER: postgres
       PASSWORD: 7777
-      HOST: localhost
+      HOST: db
       PORT: 5432
 
       EMAIL_HOST_USER: example1111@yandex.ru
@@ -53,7 +32,7 @@ jobs:
           - 5432:5432
 
         options: >-
-          --health-cmd="pg_isready -U postgres -d django_start"
+          --health-cmd="pg_isready -U postgres -d django_project"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -62,14 +41,14 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Install Poetry
-        run: pipx install poetry==2.2.1
-
       - name: Set up Poetry cache
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: "poetry"
+
+      - name: Install Poetry
+        run: pipx install poetry==2.2.1
 
       - name: Install dependencies
         run: poetry install --no-interaction --no-ansi --no-root
@@ -79,6 +58,29 @@ jobs:
 
       - name: Run tests
         run: poetry run python manage.py test
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: "poetry"
+
+      - name: Install Poetry
+        run: pipx install poetry==2.2.1
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-ansi --no-root
+
+      - name: Run Flake8
+        run: poetry run flake8 .
 
 #  build:
 #    runs-on: ubuntu-latest

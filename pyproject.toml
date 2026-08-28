@@ -60,3 +60,7 @@ exclude = '''
 [tool.isort]
 # Максимальная длина строки
 line_length = 119
+[dependency-groups]
+dev = [
+    "flake8 (>=7.3.0,<8.0.0)"
+]
