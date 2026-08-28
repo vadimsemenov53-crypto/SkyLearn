@@ -39,6 +39,7 @@ class CourseTestCase(APITestCase):
                     "id": self.course.pk,
                     "name": self.course.name,
                     "description": self.course.description,
+                    "amount": None,
                     "count_lessons_in_course": 1,
                     "lesson": [
                         {
@@ -58,6 +59,7 @@ class CourseTestCase(APITestCase):
                     "id": self.course2.pk,
                     "name": self.course2.name,
                     "description": self.course2.description,
+                    "amount": None,
                     "count_lessons_in_course": 0,
                     "lesson": [],
                     "creator": None,
@@ -109,7 +111,7 @@ class CourseTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        self.assertEqual(response.json(), {"detail": "You do not have permission to perform this action."})
+        self.assertEqual(response.json(), {"detail": "У вас недостаточно прав для выполнения данного действия."})
 
     def test_course_update(self):
         """Тестирование обновление данных курса для -> materials:course-detail."""
@@ -146,7 +148,7 @@ class CourseTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        self.assertEqual(response.json(), {"detail": "You do not have permission to perform this action."})
+        self.assertEqual(response.json(), {"detail": "У вас недостаточно прав для выполнения данного действия."})
 
     def test_course_subscription(self):
         """Тестирование подписки на курс для -> materials:subscription."""
@@ -270,7 +272,7 @@ class LessonTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        self.assertEqual(response.json(), {"detail": "You do not have permission to perform this action."})
+        self.assertEqual(response.json(), {"detail": "У вас недостаточно прав для выполнения данного действия."})
 
     def test_lesson_update(self):
         """Тестирование обновление данных урока для -> materials:lessons_update."""
@@ -307,4 +309,4 @@ class LessonTestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        self.assertEqual(response.json(), {"detail": "You do not have permission to perform this action."})
+        self.assertEqual(response.json(), {"detail": "У вас недостаточно прав для выполнения данного действия."})

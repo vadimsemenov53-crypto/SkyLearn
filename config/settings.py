@@ -148,10 +148,6 @@ CORS_ALLOWED_ORIGINS = [
     "https://read-and-write.example.com",
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://read-and-write.example.com",
-]
-
 STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 
 CELERY_TIMEZONE = TIME_ZONE
